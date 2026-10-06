@@ -29,7 +29,7 @@ abstract final class AppTheme {
             borderSide: const BorderSide(color: AppColors.blue, width: 2),
           ),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: Colors.white,
           elevation: 0,
           margin: EdgeInsets.zero,
