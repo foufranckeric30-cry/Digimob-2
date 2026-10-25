@@ -2,6 +2,7 @@ enum UserRole {
   client,
   technicien,
   coordinatrice,
+ admin,
 }
 
 class AuthSession {

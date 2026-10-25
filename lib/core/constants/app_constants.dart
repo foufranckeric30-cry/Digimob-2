@@ -4,6 +4,7 @@ abstract final class AppConstants {
   static const String roleClient = 'CLIENT';
   static const String roleTechnicien = 'TECHNICIEN';
   static const String roleCoordinatrice = 'COORDINATRICE';
+static const String roleAdmin = 'ADMIN';
 
   static const String statusCreated = 'CREATED';
   static const String statusPendingAssignment = 'PENDING_ASSIGNMENT';

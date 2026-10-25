@@ -1,4 +1,4 @@
-
+import '../../admin/presentation/admin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,6 +43,8 @@ class RoleDashboardScreen extends ConsumerWidget {
 
           case UserRole.coordinatrice:
             return const CoordinatorScreen();
+	  case UserRole.admin:
+ 		return const AdminScreen();
         }
       },
     );
