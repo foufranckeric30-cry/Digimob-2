@@ -1,17 +1,34 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../features/auth/presentation/login_screen.dart';
-import '../features/dashboard/presentation/dashboard_screen.dart';
+import 'package:flutter/material.dart';
 
-final routerProvider = Provider<GoRouter>((ref) {
-  return GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(path: '/', builder: (_, __) => const LoginScreen()),
-      GoRoute(
-        path: '/dashboard',
-        builder: (_, __) => const DashboardScreen(),
+class AppRouter {
+  static const String initialRoute = '/';
+
+  static final Map<String, WidgetBuilder> routes = {
+    '/': (context) => const _PlaceholderScreen(
+          title: 'DigiCâble',
+          message: 'Architecture initialisée',
+        ),
+  };
+}
+
+class _PlaceholderScreen extends StatelessWidget {
+  final String title;
+  final String message;
+
+  const _PlaceholderScreen({
+    required this.title,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
       ),
-    ],
-  );
-});
+      body: Center(
+        child: Text(message),
+      ),
+    );
+  }
+}

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'router.dart';
+
+import 'router/app_router.dart';
 import 'theme/app_theme.dart';
 
-class DigiCableApp extends ConsumerWidget {
+class DigiCableApp extends StatelessWidget {
   const DigiCableApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
+  Widget build(BuildContext context) {
+    return MaterialApp(
       title: 'DigiCâble',
-      theme: AppTheme.light,
       debugShowCheckedModeBanner: false,
-      routerConfig: ref.watch(routerProvider),
+      theme: AppTheme.light,
+      initialRoute: AppRouter.initialRoute,
+      routes: AppRouter.routes,
     );
   }
 }
