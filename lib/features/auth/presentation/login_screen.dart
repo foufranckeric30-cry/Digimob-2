@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../app/theme/app_theme.dart';
 import 'auth_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -11,13 +13,16 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final identifierController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _identifierController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
-    identifierController.dispose();
-    passwordController.dispose();
+    _identifierController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -30,12 +35,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             context.go('/dashboard');
           }
         },
-        error: (error, _) => ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(_message(error))),
-        ),
+        error: (error, _) {
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                error is FormatException
+                    ? error.message
+                    : 'Connexion impossible. Réessayez.',
+              ),
+            ),
+          );
+        },
       );
     });
+
     final auth = ref.watch(authControllerProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -43,55 +60,105 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             padding: const EdgeInsets.all(24),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Icon(Icons.live_tv, size: 64, color: Color(0xFF062B5C)),
-                  const SizedBox(height: 16),
-                  Text('Bienvenue sur DigiCâble',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                      textAlign: TextAlign.center),
-                  const SizedBox(height: 32),
-                  TextField(
-                    controller: identifierController,
-                    decoration: const InputDecoration(
-                      labelText: 'Numéro client',
-                      prefixIcon: Icon(Icons.person_outline),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Icon(
+                      Icons.live_tv_rounded,
+                      size: 76,
+                      color: AppColors.blue,
                     ),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Mot de passe',
-                      prefixIcon: Icon(Icons.lock_outline),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'DigiCâble',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.navy,
+                      ),
                     ),
-                    onSubmitted: (_) => _login(),
-                  ),
-                  const SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: auth.isLoading ? null : _login,
-                    child: auth.isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text('Se connecter'),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Mot de passe oublié ?'),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Mode démonstration : mot de passe « demo1234 ».',
-                    style: Theme.of(context).textTheme.bodySmall,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      'Connectez-vous à votre espace',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey.shade700),
+                    ),
+                    const SizedBox(height: 36),
+                    TextFormField(
+                      controller: _identifierController,
+                      decoration: const InputDecoration(
+                        labelText: 'Identifiant',
+                        hintText: 'Votre identifiant',
+                        prefixIcon: Icon(Icons.person_outline),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) =>
+                          value == null || value.trim().isEmpty
+                              ? 'Saisissez votre identifiant.'
+                              : null,
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Mot de passe',
+                        hintText: 'Votre mot de passe',
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          tooltip: 'Afficher ou masquer le mot de passe',
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                          ),
+                        ),
+                      ),
+                      validator: (value) =>
+                          value == null || value.isEmpty
+                              ? 'Saisissez votre mot de passe.'
+                              : null,
+                      onFieldSubmitted: (_) => _login(),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 52,
+                      child: FilledButton(
+                        onPressed: auth.isLoading ? null : _login,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.navy,
+                        ),
+                        child: auth.isLoading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text('Se connecter'),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Version de démonstration uniquement',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -100,15 +167,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _login() {
-    ref.read(authControllerProvider.notifier).login(
-          identifierController.text,
-          passwordController.text,
-        );
-  }
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) return;
 
-  String _message(Object error) {
-    if (error is FormatException) return error.message;
-    return 'Connexion impossible. Vérifiez votre réseau et réessayez.';
+    await ref.read(authControllerProvider.notifier).login(
+          _identifierController.text.trim(),
+          _passwordController.text,
+        );
   }
 }

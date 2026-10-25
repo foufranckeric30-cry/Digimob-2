@@ -13,3 +13,8 @@ android/local.properties
 android/key.properties
 *.jks
 *.keystore
+
+# Secrets et comptes de service Firebase
+*service-account*.json
+*serviceAccount*.json
+.env

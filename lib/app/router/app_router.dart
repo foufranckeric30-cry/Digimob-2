@@ -1,33 +1,23 @@
-import 'package:flutter/material.dart';
+
+import 'package:go_router/go_router.dart';
+
+import '../../features/auth/presentation/login_screen.dart';
+import '../../features/dashboard/presentation/role_dashboard_screen.dart';
 
 class AppRouter {
   static const String initialRoute = '/';
 
-  static final Map<String, WidgetBuilder> routes = {
-    '/': (context) => const _PlaceholderScreen(
-          title: 'DigiCâble',
-          message: 'Architecture initialisée',
-        ),
-  };
-}
-
-class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-  final String message;
-  const _PlaceholderScreen({
-    required this.title,
-    required this.message,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+  static final GoRouter router = GoRouter(
+    initialLocation: initialRoute,
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const LoginScreen(),
       ),
-      body: Center(
-        child: Text('Écran $title en cours de développement'),
+      GoRoute(
+        path: '/dashboard',
+        builder: (context, state) => const RoleDashboardScreen(),
       ),
-    );
-  }
+    ],
+  );
 }

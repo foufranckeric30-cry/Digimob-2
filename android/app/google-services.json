@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "762421685677",
+    "project_id": "digicable8mobile",
+    "storage_bucket": "digicable8mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:762421685677:android:59e10bc35e04905d328524",
+        "android_client_info": {
+          "package_name": "com.example.digicable_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsGgxmaZbmnh6Q5nWmA-PAZVDt1Av7uwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,6 +7,10 @@ class DashboardSummary {
     required this.subscriptionStatus,
     required this.operations,
     required this.notifications,
+    required this.installationStatus,
+    required this.installationAddress,
+    required this.technicianName,
+    required this.technicianPhone,
   });
 
   final String clientNumber;
@@ -16,4 +20,8 @@ class DashboardSummary {
   final String subscriptionStatus;
   final List<String> operations;
   final List<String> notifications;
+  final String installationStatus;
+  final String installationAddress;
+  final String technicianName;
+  final String technicianPhone;
 }

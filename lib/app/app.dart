@@ -1,3 +1,4 @@
+//import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'router/app_router.dart';
@@ -8,12 +9,11 @@ class DigiCableApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'DigiCâble',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      initialRoute: AppRouter.initialRoute,
-      routes: AppRouter.routes,
+      routerConfig: AppRouter.router,
     );
   }
 }
